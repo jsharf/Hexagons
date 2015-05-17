@@ -2,6 +2,7 @@ from math import sin, cos, sqrt, floor
 import matplotlib.pyplot as plt
 import numpy.random as rnd
 import numpy as np
+import random
 import png
 
 PI = 3.1415926535
@@ -247,9 +248,14 @@ class Hexagon:
             p2 = self.getCorner(i + 1)
             draw(p1, p2)    
     def cube(self):
-        self.center.x
-        y = (-self.center.x * sqrt(3.0) / 3 + self.center.y / 3.0)/self.edge
-        z = (-self.center.y * 2.0/3)/self.edge
+        self.center.z = -(self.center.x + self.center.y)
+        a = sqrt(3.0)/2.0
+        b = sqrt(3.0)/4.0
+        c = 0
+        d = -0.75
+        multiplier = 1/(a*d - b*c)
+        y = multiplier*(self.center.x * d + self.center.y * -b)/(self.edge*2)
+        z = multiplier*(-c * self.center.x +self.center.y * a)/(self.edge*2)
         x = -(y + z)
         return Cube(Coordinate(x, y), self.edge)
         
@@ -265,12 +271,10 @@ def Column(x, edge):
         chain.hexagon().draw()
         chain = chain.getNeighbor('RD')
 
-A = Hexagon(0, 0, 100)
-B = Hexagon(0, -100, 100)
-B.cube().getNeighbor('RD').hexagon().draw()
-B.cube().getNeighbor('LD').hexagon().draw()
-A.draw()
-B.draw()
+# To create an image with hexagons, add your code here!
+# For examples of how to use my library (the code in this file), see the code in
+# the examples/ folder. Just paste any of those samples here and run to generate
+# the file (output.png)
 
 
 pic = render()
