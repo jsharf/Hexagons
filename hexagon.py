@@ -4,11 +4,12 @@ import numpy.random as rnd
 import numpy as np
 import random
 import png
+import pdb
 
 PI = 3.1415926535
 
-Xdim = 1000
-Ydim = 1000
+Xdim = 1080
+Ydim = 1920
 
 BGR = 20
 BGG = 75
@@ -148,18 +149,18 @@ def plot(x, y, c):
     increments = [int(c*float(remain)) for remain in remaining]
     bitmap[x][y] = [cur + incr for (cur, incr) in zip(current, increments)]
 
-def constrain(x, minimum, maximum):
+def inRange(x, minimum, maximum):
     if (x < minimum):
-        return minimum
-    if (x > maximum):
-        return maximum
-    return x
+        return False
+    if (x >= maximum):
+        return False
+    return True
 
 def zeroPlotInOct(zero, octant, x, y, c):
     (xo, yo) = switchToOctantFromZero(octant, x, y)
-    (xb, yb) = (constrain(xo + zero[0], 0, Xdim-1), constrain(yo + zero[1], 0,
-        Ydim-1))
-    plot(int(xb), int(yb), c)
+    if (inRange(xo + zero[0], 0, Xdim-1)):
+        if (inRange(yo + zero[1], 0, Ydim-1)):
+            plot(int(zero[0] + xo), int(zero[1] + yo), c)
 
 def xiaolinZeroLine(zero, xp, yp):
     (xo, yo) = (xp - zero[0], yp - zero[1])
@@ -191,21 +192,24 @@ def xiaolinZeroLine(zero, xp, yp):
         intery += gradient
 
 def line(x0, y0, x1, y1):
-    xiaolinZeroLine((y0, x0), y1, x1)
+    xiaolinZeroLine((x0, y0), x1, y1)
 
 def draw(p1, p2):
+    global center
     line(p1.x + center.x, p1.y + center.y, p2.x + center.x, p2.y + center.y)
 
 def line_center(x0, y0, x1, y1):
+    global center
     line(x0 + center.x, y0 + center.y, x1 + center.x, y1 + center.y)
 
 def render():
-    resized = [[0 for _ in range(3*Ydim)] for _ in range(Xdim)]
+    global bitmap
+    resized = [[0 for _ in range(3*Xdim)] for _ in range(Ydim)]
     for i in range(Xdim):
         for j in range(Ydim):
-            resized[i][j*3 + 0] = bitmap[i][j][0]
-            resized[i][j*3 + 1] = bitmap[i][j][1]
-            resized[i][j*3 + 2] = bitmap[i][j][2]
+            resized[j][i*3 + 0] = bitmap[i][j][0]
+            resized[j][i*3 + 1] = bitmap[i][j][1]
+            resized[j][i*3 + 2] = bitmap[i][j][2]
     pic = png.from_array(resized, mode='RGB;8')
     return pic
 
@@ -223,8 +227,8 @@ class Cube:
         self.loc.z = -(self.loc.x + self.loc.y)
         self.gridSize = grid
     def getNeighbor(self, direction):
-        center = self.loc + Cube.Directions[direction]
-        return Cube(center, self.gridSize)
+        lcenter = self.loc + Cube.Directions[direction]
+        return Cube(lcenter, self.gridSize)
     def hexagon(self):
         height = 2.0*self.gridSize
         basisr = Coordinate(sqrt(3.0)/2.0, 0, 0).mult(height)
@@ -261,11 +265,12 @@ class Hexagon:
         
 
 def Column(x, edge):
+    x -= 0.25*sqrt(3)*edge
     nHexagons = int(Ydim/(1.5*edge)) - 1
     Top = Hexagon(x, -Ydim/2 + edge, edge)
     Top.draw()
     chain = Top.cube().getNeighbor('RD')
-    for _ in range(nHexagons/2):
+    for _ in range(nHexagons):
         chain.hexagon().draw()
         chain = chain.getNeighbor('LD')
         chain.hexagon().draw()
@@ -275,20 +280,22 @@ def Column(x, edge):
 # For examples of how to use my library (the code in this file), see the code in
 # the examples/ folder. Just paste any of those samples here and run to generate
 # the file (output.png)
-Column(-300, 50)
-Column(-170, 50)
-Column(-160, 50)
-Column(-150, 50)
-Column(-20, 50)
-Column(-10, 50)
-Column(0, 50)
-Column(10, 50)
-Column(20, 50)
-Column(150, 50)
-Column(160, 50)
-Column(170, 50)
-Column(300, 50)
+size = 50
+Column(-300, size)
+Column(-170, size)
+Column(-160, size)
+Column(-150, size)
+Column(-20, size)
+Column(-10, size)
+Column(0, size)
+Column(10, size)
+Column(20, size)
+Column(150, size)
+Column(160, size)
+Column(170, size)
+Column(300, size)
 
+line_center(0, 0, 10, 10)
 
 pic = render()
 pic.save('output.png')
