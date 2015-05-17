@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import numpy.random as rnd
 import numpy as np
 import png
-import pdb
 
 PI = 3.1415926535
 
@@ -159,7 +158,6 @@ def zeroPlotInOct(zero, octant, x, y, c):
     (xo, yo) = switchToOctantFromZero(octant, x, y)
     (xb, yb) = (constrain(xo + zero[0], 0, Xdim-1), constrain(yo + zero[1], 0,
         Ydim-1))
-    print((xb, yb))
     plot(int(xb), int(yb), c)
 
 def xiaolinZeroLine(zero, xp, yp):
@@ -257,7 +255,6 @@ class Hexagon:
         
 
 def Column(x, edge):
-    print("TOP")
     nHexagons = int(Ydim/(1.5*edge)) - 1
     Top = Hexagon(x, -Ydim/2 + edge, edge)
     Top.draw()
