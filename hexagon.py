@@ -266,14 +266,11 @@ def Column(x, edge):
         chain = chain.getNeighbor('RD')
 
 A = Hexagon(0, 0, 100)
-B = A.cube()
-E = Cube(Coordinate(B.loc.x - 0.353, B.loc.y - 0.353, B.loc.z), 100)
-C = Cube(Coordinate(E.loc.x, E.loc.y + 1, E.loc.z), 100)
-D = Cube(Coordinate(E.loc.x + 1, E.loc.y, E.loc.z), 100)
-C.hexagon().draw()
-D.hexagon().draw()
-E.hexagon().draw()
+B = Hexagon(0, -100, 100)
+B.cube().getNeighbor('RD').hexagon().draw()
+B.cube().getNeighbor('LD').hexagon().draw()
 A.draw()
+B.draw()
 
 
 pic = render()
