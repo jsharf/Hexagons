@@ -165,8 +165,8 @@ def xiaolinZeroLine(zero, xp, yp):
     (xo, yo) = (xp - zero[0], yp - zero[1])
     o = octant(xo, yo)
     (x, y) = switchToOctantZeroFrom(o, xo, yo)
-    dy = int(y)
-    dx = int(x)
+    dy = (y)
+    dx = (x)
     gradient = float(dy)/float(dx)
     # first endpoint
     xend  = 0
@@ -185,7 +185,7 @@ def xiaolinZeroLine(zero, xp, yp):
     ypx12 = ipart(yend)
     zeroPlotInOct(zero, o, xpx12, ypx12, rfpart(yend) * xgap)
     zeroPlotInOct(zero, o, xpx12, ypx12 + 1, fpart(yend) * xgap)
-    for x in range(xpx11 + 1, xpx12 - 1):
+    for x in range(xpx11 + 1, xpx12):
         zeroPlotInOct(zero, o, x, ipart(intery), rfpart(intery)) 
         zeroPlotInOct(zero, o, x, ipart(intery) + 1, fpart(intery)) 
         intery += gradient
@@ -275,6 +275,19 @@ def Column(x, edge):
 # For examples of how to use my library (the code in this file), see the code in
 # the examples/ folder. Just paste any of those samples here and run to generate
 # the file (output.png)
+Column(-300, 50)
+Column(-170, 50)
+Column(-160, 50)
+Column(-150, 50)
+Column(-20, 50)
+Column(-10, 50)
+Column(0, 50)
+Column(10, 50)
+Column(20, 50)
+Column(150, 50)
+Column(160, 50)
+Column(170, 50)
+Column(300, 50)
 
 
 pic = render()
